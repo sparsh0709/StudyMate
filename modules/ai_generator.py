@@ -1,4 +1,4 @@
-i have 
+
 """AI generator — sends rendered prompts to the Gemini API
 through Google's OpenAI-compatible endpoint.
 """
@@ -139,7 +139,7 @@ def _friendly_error(exc: Exception) -> str:
     if name in ("APIConnectionError", "APITimeoutError"):
         return "Could not connect to Gemini. Check your internet connection."
 
-    return f"{name}: {msg[:300]}"
+    return f"{name}: {msg[:1500]}"
 
 
 def _is_transient(exc: Exception) -> bool:
