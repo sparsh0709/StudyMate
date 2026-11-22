@@ -1,0 +1,41 @@
+digraph StudyMate {
+  rankdir=TB; bgcolor="white"; pad=0.3; nodesep=0.4; ranksep=0.45; newrank=true;
+  node [shape=box, style="rounded,filled", fillcolor="#F6F6F6", color="#BBBBBB", fontname="Helvetica", fontsize=11, margin="0.18,0.10"];
+  edge [color="#555555", fontname="Helvetica", fontsize=9, arrowsize=0.7];
+
+  user [label="Student (browser)", fillcolor="#111111", fontcolor="white", color="#111111"];
+  subgraph cluster_ui { label="Presentation layer — app.py (Streamlit)"; fontname="Helvetica-Bold"; fontsize=11; color="#DDDDDD"; style="rounded";
+    ui_gen [label="Generate page\nnotes · subject · version · detail"];
+    ui_cmp [label="Compare prompts page\nV1 / V2 / V3 side by side"];
+    ui_res [label="Results\nSummary · Key Concepts · Questions\nRevision · Verification · Copy/Download"];
+  }
+  subgraph cluster_logic { label="Application layer — modules/"; fontname="Helvetica-Bold"; fontsize=11; color="#DDDDDD"; style="rounded";
+    val [label="input_validator.py\nempty · length · PII warning"];
+    pm  [label="prompt_manager.py\nload prompt_vN.txt · fill placeholders"];
+    gen [label="ai_generator.py\n3 tasks in parallel · retries"];
+    fmt [label="output_formatter.py\nparse · evidence check · export"];
+    ev  [label="evaluator.py\nautomatic metrics"];
+  }
+  subgraph cluster_ext { label="Data & external services"; fontname="Helvetica-Bold"; fontsize=11; color="#DDDDDD"; style="rounded";
+    prompts [label="prompts/prompt_v1–v3.txt", shape=note];
+    env [label=".env  (OPENAI_API_KEY, OPENAI_MODEL)", shape=note];
+    api [label="OpenAI API — Chat Completions", fillcolor="#FFFFFF", color="#111111", penwidth=1.4];
+  }
+  subgraph cluster_eval { label="Offline evaluation (CLI)"; fontname="Helvetica-Bold"; fontsize=11; color="#DDDDDD"; style="rounded,dashed";
+    runner [label="run_evaluation.py\n12 test cases × V1–V3\n(reuses the same modules)"];
+    csv [label="tests/evaluation_results.csv\ntests/outputs/<run>/", shape=note];
+    summ [label="summarize_results.py"];
+  }
+  {rank=same; ui_gen; ui_cmp; ui_res;}
+  {rank=same; val; pm; gen; fmt; ev;}
+  {rank=same; prompts; env; api; runner;}
+
+  user -> ui_gen; user -> ui_cmp;
+  ui_gen -> val; ui_cmp -> val;
+  val -> pm [label="valid notes"]; pm -> gen [label="messages"]; gen -> fmt [label="raw text"]; fmt -> ev;
+  ev -> ui_res; fmt -> ui_res;
+  prompts -> pm [dir=back, label="reads"]; env -> gen [dir=back, style=dashed];
+  gen -> api [label="3 requests"]; 
+  runner -> csv -> summ;
+  runner -> val [style=dashed, constraint=false];
+}

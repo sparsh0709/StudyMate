@@ -1,0 +1,16 @@
+OS Lecture 9 — Deadlocks
+
+A deadlock can only occur if all four Coffman conditions hold at the same time. If we prevent any one of them, deadlock cannot happen.
+
+We can draw the system as a RAG. If the RAG has no cycle, there is no deadlock. If there is a cycle and every resource has only one instance, there is a deadlock. With multiple instances a cycle means deadlock is possible but not certain.
+
+Three ways to handle deadlocks:
+1. Prevention — break one of the Coffman conditions, e.g. make processes request all resources at the start, or impose an ordering on resource types.
+2. Avoidance — use the Banker's algorithm to make sure the system always stays in a safe state.
+3. Detection and recovery — let deadlocks happen, detect them periodically, then recover by killing processes or preempting resources.
+
+Most real operating systems (including Linux and Windows) basically ignore deadlocks (the ostrich approach) because prevention and avoidance are expensive.
+
+Livelock is different from deadlock: processes keep changing state but make no progress.
+
+Starvation can happen when recovery always picks the same process as the victim; include the number of rollbacks in the cost factor to avoid this.

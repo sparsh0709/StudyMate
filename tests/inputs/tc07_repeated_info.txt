@@ -1,0 +1,21 @@
+Hashing — lecture notes
+
+A hash table stores key-value pairs. A hash function converts a key into an index in an array.
+A hash table stores key-value pairs and uses a hash function to map each key to an index.
+The hash function maps a key to an array index. This is how a hash table works.
+
+A collision happens when two different keys map to the same index.
+Collisions happen when two keys get the same index from the hash function.
+Remember: a collision is when two keys hash to the same index!!
+
+Chaining handles collisions by keeping a linked list at each index. All keys that hash to the same index are stored in that list.
+Separate chaining = linked list at every slot. Keys with the same hash go into the same list.
+
+Open addressing handles collisions by finding another empty slot in the array. Linear probing checks the next slot, then the next, and so on.
+In open addressing, if the slot is full we probe for another slot. Linear probing = try index+1, index+2, ...
+
+Load factor = number of stored keys / table size. When the load factor gets too high, performance drops and the table should be resized (rehashing).
+Load factor is n / m. High load factor = more collisions = slower. Resize the table when the load factor is high.
+
+Average time for search, insert and delete in a hash table is O(1). Worst case is O(n) when all keys collide.
+Average case O(1), worst case O(n). Hash tables are O(1) on average.

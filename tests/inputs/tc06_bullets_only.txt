@@ -1,0 +1,14 @@
+- DBMS Unit 2: Normalization
+- goal: reduce redundancy, avoid anomalies
+- anomalies: insertion, update, deletion
+- functional dependency X -> Y: X determines Y
+- 1NF: atomic values, no repeating groups
+- 2NF: 1NF + no partial dependency on part of a composite key
+- 3NF: 2NF + no transitive dependency (non-key -> non-key)
+- BCNF: for every FD X -> Y, X is a superkey
+- BCNF stricter than 3NF
+- every BCNF table is in 3NF, not every 3NF table is in BCNF
+- decomposition should be lossless join
+- dependency preservation is desirable, not always possible in BCNF
+- denormalization: sometimes used for read performance
+- example: Student(roll, name, course_id, course_name) -> course_name depends only on course_id -> split into Student(roll, name, course_id) + Course(course_id, course_name)

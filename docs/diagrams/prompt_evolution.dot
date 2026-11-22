@@ -1,0 +1,9 @@
+digraph Evolution {
+  rankdir=LR; bgcolor="white"; pad=0.3; nodesep=0.3;
+  node [shape=box, style="rounded,filled", fillcolor="#F6F6F6", color="#BBBBBB", fontname="Helvetica", fontsize=10.5, margin="0.2,0.12"];
+  edge [color="#555555", fontname="Helvetica", fontsize=9, arrowsize=0.7];
+  v1 [label=<<b>V1 — Baseline</b><br/><br/>• one-line instruction per task<br/>• no format, no limits<br/>• no grounding rules>];
+  v2 [label=<<b>V2 — Structured</b><br/><br/>• role + audience<br/>• exact Markdown headings<br/>• word/item limits by detail level<br/>• exactly 5 Q, factual/conceptual mix<br/>• fixed Q/A format>];
+  v3 [label=<<b>V3 — Grounded &amp; Quality-Controlled</b><br/><br/>• use ONLY the notes<br/>• notes in &lt;lecture_notes&gt; tags, treated as data<br/>• "Not stated in the notes" for gaps<br/>• INSUFFICIENT_NOTES escape hatch<br/>• verbatim evidence quotes (checked by app)<br/>• no padding, no repetition<br/>• source coverage + silent self-check>, fillcolor="#111111", fontcolor="white", color="#111111"];
+  v1 -> v2 [label="  structure\n  & consistency"]; v2 -> v3 [label="  grounding\n  & reliability"];
+}

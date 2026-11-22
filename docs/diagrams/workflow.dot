@@ -1,0 +1,24 @@
+digraph Workflow {
+  rankdir=TB; bgcolor="white"; pad=0.3; nodesep=0.3; ranksep=0.35;
+  node [shape=box, style="rounded,filled", fillcolor="#F6F6F6", color="#BBBBBB", fontname="Helvetica", fontsize=11, width=2.6];
+  edge [color="#555555", fontname="Helvetica", fontsize=9, arrowsize=0.7];
+  start [label="Paste notes or upload .txt\n+ subject, prompt version, detail level", fillcolor="#111111", fontcolor="white", color="#111111"];
+  validate [label="Validate input", shape=diamond, width=2.0, height=0.8];
+  reject [label="Show error\n(no API call, no cost)", fillcolor="#FFFFFF"];
+  warn [label="Show warnings\n(very short / long / personal data)"];
+  render [label="Render prompt messages\nfrom prompts/prompt_vN.txt"];
+  subgraph cluster_par { label="Parallel API calls"; fontname="Helvetica-Bold"; fontsize=10; color="#DDDDDD"; style="rounded";
+    a [label="A. Summary\nmain topic · summary · key concepts", width=2.2];
+    b [label="B. Questions\n5 Q&A (factual + conceptual)", width=2.2];
+    c [label="C. Revision\npoints · definitions · checklist\n(+ source coverage in V3)", width=2.2];
+  }
+  insuff [label="INSUFFICIENT_NOTES?", shape=diamond, width=2.2, height=0.8];
+  notice [label="Show 'notes insufficient' notice", fillcolor="#FFFFFF"];
+  parse [label="Parse sections and questions"];
+  verify [label="Check evidence quotes against notes\n+ compute metrics"];
+  show [label="Display tabs · download .md/.txt · copy", fillcolor="#111111", fontcolor="white", color="#111111"];
+  start -> validate; validate -> reject [label="empty / too long"]; validate -> warn [label="ok"];
+  warn -> render; render -> a; render -> b; render -> c;
+  a -> insuff; b -> insuff; c -> insuff;
+  insuff -> notice [label="yes"]; insuff -> parse [label="no"]; notice -> show; parse -> verify -> show;
+}

@@ -1,0 +1,24 @@
+Operating Systems — Unit 3: CPU Scheduling
+
+A process is a program in execution. The OS keeps processes in a ready queue while they wait for the CPU. The CPU scheduler (short-term scheduler) selects which ready process runs next. The dispatcher then gives control of the CPU to that process; the time it takes is called dispatch latency.
+
+Process states: new, ready, running, waiting, terminated. A running process moves to waiting when it requests I/O and back to ready when the I/O completes.
+
+Preemptive vs non-preemptive: In non-preemptive scheduling, a process keeps the CPU until it finishes or blocks. In preemptive scheduling, the OS can take the CPU away, for example when a timer interrupt fires or a higher-priority process arrives.
+
+Scheduling criteria:
+- CPU utilisation: keep the CPU as busy as possible.
+- Throughput: number of processes completed per unit time.
+- Turnaround time: completion time minus arrival time.
+- Waiting time: total time spent in the ready queue (turnaround time minus burst time).
+- Response time: time from submission until the first response is produced.
+
+Algorithms:
+1. First-Come, First-Served (FCFS): processes run in order of arrival. Simple, non-preemptive. Suffers from the convoy effect, where short processes wait behind one long process.
+2. Shortest Job First (SJF): run the process with the smallest next CPU burst. It gives the minimum average waiting time for a given set of processes, but the length of the next burst is hard to know in advance. The preemptive version is called Shortest Remaining Time First (SRTF).
+3. Priority scheduling: each process has a priority and the highest-priority process runs first. Problem: starvation of low-priority processes. Solution: aging, which gradually increases the priority of processes that wait a long time.
+4. Round Robin (RR): each process gets a small unit of CPU time called a time quantum (for example 10–100 ms). If it does not finish, it is preempted and put at the back of the ready queue. If the quantum is too large, RR behaves like FCFS; if it is too small, there is too much context-switch overhead.
+
+Context switch: saving the state of the current process in its PCB (process control block) and loading the saved state of the next process. Context switching is pure overhead because no useful work is done during it.
+
+Example (FCFS): P1 burst 24, P2 burst 3, P3 burst 3, all arriving at time 0 in that order. Waiting times are 0, 24 and 27, so average waiting time = 17. If the order is P2, P3, P1 the waiting times are P2 = 0, P3 = 3 and P1 = 6, so the average is 3 — this shows the convoy effect.

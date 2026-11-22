@@ -1,0 +1,23 @@
+# StudyMate Prompt — Version 1: Baseline
+# Purpose: a deliberately simple, instruction-only prompt. It is the control
+# condition for the experiments. No output format, no word limits, no
+# grounding rules. Placeholders: {{SUBJECT}}, {{NOTES}}
+# Detail level is intentionally NOT used by this version.
+
+=== SYSTEM ===
+You are a helpful study assistant.
+
+=== SUMMARY ===
+Summarize these lecture notes about {{SUBJECT}} and explain the key concepts.
+
+{{NOTES}}
+
+=== QUESTIONS ===
+Write five practice questions with answers based on these lecture notes about {{SUBJECT}}.
+
+{{NOTES}}
+
+=== REVISION ===
+Write revision points and a quick revision checklist for these lecture notes about {{SUBJECT}}.
+
+{{NOTES}}

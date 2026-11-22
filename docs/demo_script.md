@@ -1,0 +1,15 @@
+# Demonstration Video Script (target ≈ 130 seconds)
+
+Record the screen at 1440×900 or 1920×1080 with QuickTime (File → New Screen Recording) or ⌘⇧5. Before recording, run `python run_evaluation.py` and `python summarize_results.py` so the testing shots show **real** results. Use a fresh browser window with the zoom at 110–125% so text is readable.
+
+| # | Time | On screen | Narration (spoken) |
+|---|---|---|---|
+| 1 | 0:00–0:15 | Title card: "StudyMate — Promptly Unemployed, Bennett University". Then a long lecture-notes file scrolling | "Before exams, students have pages of lecture notes and very little time. Making summaries and practice questions by hand is slow, and generic chatbots often add facts that were never in the notes." |
+| 2 | 0:15–0:30 | StudyMate Generate page; pan across the input card and options | "StudyMate turns your own lecture notes into a study pack, using prompts engineered to stay grounded in what you wrote. You paste notes or upload a text file, add a subject, and choose a detail level." |
+| 3 | 0:30–0:55 | Try a sample → Binary search → V3 → Generate. Show tabs: Summary → Key Concepts → Practice Questions (open one answer) | "Three separate prompt tasks run in parallel: a summary with key concepts, exactly five practice questions with answers, and revision material. Every answer carries a short quote from the notes as evidence." |
+| 4 | 0:55–1:10 | Verification tab (quotes table, terms-not-in-notes), then Revision tab and Download .md | "The Verification tab checks each quote against the original notes. A match shows grounding, not guaranteed correctness, so we always tell students to verify. The whole pack downloads as Markdown." |
+| 5 | 1:10–1:35 | Compare prompts page → sample "Notes with missing definitions" → Run with V1, V2, V3 → metrics table → Revision task side by side | "Prompt engineering is the core of the project. V1 is a plain baseline, V2 adds structure and limits, and V3 adds grounding rules, missing-information handling and injection defence. Here the notes mention the Coffman conditions without defining them — compare how each version handles that." _(describe only what the recording actually shows)_ |
+| 6 | 1:35–1:55 | `tests/evaluation_results.csv` or `docs/evaluation_summary.md` result matrix + chart; quick flash of `pytest` passing in a terminal | "We tested twelve cases — normal, long, very short, repetitive, missing definitions, empty, irrelevant and prompt-injection — across all three versions. «TO FILL: one sentence with the real headline result, including at least one failure»." |
+| 7 | 1:55–2:10 | Architecture diagram, then the About page (responsible AI) | "StudyMate is built with Python, Streamlit and the OpenAI API, with prompts stored as versioned files. Notes go to an external model, so we warn against uploading personal data and remind students that AI output can be wrong. Thank you." |
+
+**Checklist before export:** no API key visible (keep the sidebar closed), no fake data, captions readable, total length 90–150 s.

@@ -1,0 +1,1 @@
+Stack: LIFO data structure. push adds to top, pop removes from top. Used for function calls and undo.

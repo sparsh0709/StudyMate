@@ -1,0 +1,28 @@
+Lecture 7 — Sorting Algorithms
+
+Sorting arranges elements in a particular order, usually ascending. Many other algorithms (like binary search) need sorted data first.
+
+Bubble Sort
+Bubble sort repeatedly steps through the list, compares adjacent elements and swaps them if they are in the wrong order. After each full pass, the largest remaining element "bubbles" to its correct position at the end. Worst and average time: O(n^2). Best case O(n) if we stop when a pass makes no swaps. Space O(1). It is stable.
+
+Selection Sort
+Selection sort finds the minimum element in the unsorted part and swaps it with the first unsorted position. It always takes O(n^2) comparisons, even if the array is already sorted, but it makes at most n - 1 swaps. Space O(1). The standard version is not stable.
+
+Insertion Sort
+Insertion sort builds the sorted array one element at a time by taking the next element and inserting it into the correct place among the elements already sorted. Worst case O(n^2), best case O(n) for an already sorted array. It works well for small or nearly sorted inputs. Stable, in-place.
+
+Merge Sort
+Merge sort is a divide and conquer algorithm. It splits the array into two halves, recursively sorts each half, and then merges the two sorted halves. Time is O(n log n) in all cases. It needs O(n) extra space for merging. It is stable.
+
+Quick Sort
+Quick sort picks a pivot, partitions the array so smaller elements go left of the pivot and larger elements go right, then recursively sorts both parts. Average time O(n log n). Worst case O(n^2) happens when the pivot is always the smallest or largest element, for example choosing the first element as pivot on an already sorted array. Choosing a random pivot makes the worst case unlikely. It sorts in place with O(log n) average stack space. Not stable.
+
+Stability: a sorting algorithm is stable if two elements with equal keys keep their original relative order. This matters when sorting records by one field after they were already sorted by another field.
+
+Summary table:
+Algorithm | Best | Average | Worst | Space | Stable
+Bubble | n | n^2 | n^2 | 1 | Yes
+Selection | n^2 | n^2 | n^2 | 1 | No
+Insertion | n | n^2 | n^2 | 1 | Yes
+Merge | n log n | n log n | n log n | n | Yes
+Quick | n log n | n log n | n^2 | log n | No

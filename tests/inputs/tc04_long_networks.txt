@@ -1,0 +1,76 @@
+Computer Networks — Lectures 1 to 4 (combined revision notes)
+
+LECTURE 1: INTRODUCTION AND LAYERED ARCHITECTURE
+
+A computer network is a set of devices (hosts, routers, switches) connected by communication links so that they can exchange data. The Internet is a network of networks: millions of independently operated networks that agree to use common protocols.
+
+A protocol defines the format and order of messages exchanged between two or more communicating entities, and the actions taken when a message is sent or received. Without agreed protocols, two machines built by different vendors could not understand each other.
+
+Networks are organised in layers. Each layer provides a service to the layer above it and uses the services of the layer below. Layering makes a complex system easier to design, explain and change, because one layer's implementation can change without affecting the others as long as the interface stays the same. A disadvantage of layering is some duplication of functionality and overhead from extra headers.
+
+The OSI reference model has seven layers: Physical, Data Link, Network, Transport, Session, Presentation and Application. The TCP/IP model used on the Internet has five layers in most textbooks: Physical, Link, Network, Transport and Application. In the TCP/IP model the session and presentation functions are left to the application.
+
+Encapsulation: as data moves down the stack at the sender, each layer adds its own header. The application message becomes a transport-layer segment, which becomes a network-layer datagram, which becomes a link-layer frame. At the receiver each layer removes its header and passes the payload up. This is called decapsulation.
+
+Delays in packet-switched networks: total nodal delay = processing delay + queuing delay + transmission delay + propagation delay. Transmission delay is L/R, where L is packet length in bits and R is link rate in bits per second. Propagation delay is d/s, where d is the length of the link and s is the propagation speed in the medium (roughly 2 x 10^8 m/s in copper or fibre). Queuing delay depends on congestion and is the hardest to predict. Traffic intensity is La/R, where a is the average packet arrival rate; if La/R > 1, the queue grows without bound.
+
+Circuit switching vs packet switching: in circuit switching (traditional telephone network) resources along the path are reserved for the whole call, so performance is guaranteed but capacity is wasted during silent periods. In packet switching, data is split into packets that share link capacity on demand. Packet switching allows more users to share a link (statistical multiplexing) but can cause queuing delay and packet loss.
+
+LECTURE 2: APPLICATION LAYER
+
+Network applications follow either the client-server architecture or the peer-to-peer (P2P) architecture. In client-server, an always-on server with a fixed IP address serves many clients; the web and email are examples. In P2P, peers communicate directly and each peer can act as both client and server; P2P is self-scalable because new peers add service capacity as well as demand. BitTorrent is a P2P file distribution protocol.
+
+A process sends and receives messages through a socket, which is the interface between the application layer and the transport layer. To identify a receiving process we need the host's IP address and a port number. For example, web servers normally use port 80 for HTTP and 443 for HTTPS.
+
+HTTP (HyperText Transfer Protocol) is the web's application-layer protocol. It uses TCP as its transport. HTTP is stateless: the server keeps no information about past client requests. Cookies are used to keep state, for example a shopping cart, across requests.
+
+Non-persistent HTTP opens a new TCP connection for each object, costing 2 RTTs per object plus the file transmission time. Persistent HTTP (default in HTTP/1.1) keeps the connection open so multiple objects can be sent over the same connection, saving round trips. RTT (round-trip time) is the time for a small packet to travel from client to server and back.
+
+HTTP request methods include GET (request an object), POST (send form data in the body), PUT and DELETE. Common status codes: 200 OK, 301 Moved Permanently, 400 Bad Request, 404 Not Found, 505 HTTP Version Not Supported.
+
+Web caches (proxy servers) satisfy client requests without involving the origin server. They reduce response time for clients and reduce traffic on an institution's access link. The conditional GET uses the If-Modified-Since header so a cache only downloads an object again if it has changed; otherwise the server replies 304 Not Modified.
+
+DNS (Domain Name System) translates hostnames such as www.bennett.edu.in into IP addresses. DNS is a distributed, hierarchical database: root servers, top-level domain (TLD) servers such as .com and .in, and authoritative servers for each organisation. Local DNS servers cache answers to reduce delay. DNS mostly runs over UDP on port 53. A query can be iterative (each server tells the local server who to ask next) or recursive (the contacted server takes on the job of resolving the name).
+
+Email uses three major components: user agents, mail servers and SMTP (Simple Mail Transfer Protocol). SMTP pushes mail from the sender's server to the receiver's server over TCP port 25. Retrieval protocols such as IMAP or HTTP (webmail) are used by the recipient to read mail.
+
+LECTURE 3: TRANSPORT LAYER
+
+The transport layer provides logical communication between processes running on different hosts, while the network layer provides logical communication between hosts. Multiplexing at the sender gathers data from multiple sockets and adds transport headers; demultiplexing at the receiver uses header information to deliver segments to the correct socket.
+
+UDP (User Datagram Protocol) is connectionless and unreliable. It adds only multiplexing/demultiplexing and a checksum to IP. Advantages: no connection setup delay, no connection state, small 8-byte header, and no congestion control so the application can send as fast as it wants. It is used by DNS, streaming media and online games. The UDP checksum detects bit errors using the 1s complement of the 1s complement sum of the segment's 16-bit words.
+
+Reliable data transfer uses checksums to detect errors, acknowledgements (ACKs) and negative acknowledgements to tell the sender what happened, sequence numbers to detect duplicates, and timers to recover from lost packets. Stop-and-wait is simple but has poor utilisation on long links, so pipelined protocols send multiple packets before receiving ACKs. Go-Back-N uses cumulative ACKs and on a timeout retransmits all unacknowledged packets. Selective Repeat acknowledges packets individually and only retransmits the packets that were lost.
+
+TCP (Transmission Control Protocol) is connection-oriented, reliable, full-duplex and provides a byte stream. A connection is set up with a three-way handshake: SYN, SYN-ACK, ACK. TCP uses cumulative acknowledgements and a single retransmission timer. Fast retransmit: if the sender receives three duplicate ACKs for the same data, it retransmits the missing segment before the timer expires.
+
+The timeout is based on an estimate of RTT: EstimatedRTT = (1 - alpha) x EstimatedRTT + alpha x SampleRTT, usually with alpha = 0.125. TimeoutInterval = EstimatedRTT + 4 x DevRTT, where DevRTT measures how much SampleRTT varies.
+
+Flow control prevents the sender from overflowing the receiver's buffer. The receiver advertises its free buffer space in the receive window (rwnd) field, and the sender limits unacknowledged data to rwnd.
+
+Congestion control prevents senders from overloading the network. TCP uses a congestion window (cwnd). In slow start, cwnd starts at 1 MSS and doubles every RTT until it reaches the threshold (ssthresh). In congestion avoidance, cwnd grows by 1 MSS per RTT (additive increase). On a loss detected by triple duplicate ACK, TCP Reno halves cwnd (multiplicative decrease) and continues with fast recovery. On a timeout, cwnd is reset to 1 MSS and slow start begins again. This behaviour is called AIMD — additive increase, multiplicative decrease — and produces the "sawtooth" shape of cwnd over time.
+
+LECTURE 4: NETWORK LAYER
+
+The network layer moves datagrams from the sending host to the receiving host. Its two key functions are forwarding (moving a packet from a router's input link to the correct output link, a local data-plane action) and routing (determining the end-to-end path, a network-wide control-plane action).
+
+IPv4 addresses are 32 bits, written in dotted-decimal notation such as 192.168.1.10. CIDR (Classless Inter-Domain Routing) writes the network part with a prefix length, for example 200.23.16.0/23, meaning the first 23 bits identify the subnet. Routers use longest prefix matching: when several forwarding table entries match a destination address, the one with the longest matching prefix is used.
+
+DHCP (Dynamic Host Configuration Protocol) lets a host obtain an IP address automatically when it joins a network. The four steps are DHCP discover, DHCP offer, DHCP request and DHCP ACK. DHCP can also provide the address of the first-hop router, the DNS server and the subnet mask.
+
+NAT (Network Address Translation) lets all devices in a home or office network share one public IPv4 address. The NAT router rewrites the source IP address and port of outgoing datagrams and keeps a translation table so replies can be sent to the correct internal host. NAT helped slow down IPv4 address exhaustion but breaks the end-to-end principle.
+
+IPv6 uses 128-bit addresses, a fixed 40-byte header, no fragmentation at routers and no header checksum. During the transition, tunnelling carries IPv6 datagrams inside IPv4 datagrams across IPv4-only routers.
+
+Routing algorithms: a link-state algorithm (such as Dijkstra's algorithm, used in OSPF) requires each router to know the complete topology and link costs. A distance-vector algorithm (based on the Bellman-Ford equation, used in RIP) has each router exchange distance vectors only with its neighbours. Distance-vector routing can suffer from the count-to-infinity problem when a link cost increases; poisoned reverse is a partial fix.
+
+The Internet uses hierarchical routing. Routers are grouped into autonomous systems (AS). Intra-AS routing (for example OSPF) happens inside one AS; inter-AS routing between different ASes uses BGP (Border Gateway Protocol). BGP lets an AS learn which destinations are reachable through neighbouring ASes and choose routes according to policy, not just shortest path.
+
+ICMP (Internet Control Message Protocol) is used by hosts and routers to report errors and other network-level information, for example "destination unreachable". The ping and traceroute tools use ICMP messages.
+
+EXAM TIPS FROM THE LECTURER
+- Be able to calculate transmission and propagation delay.
+- Know the difference between TCP flow control and congestion control.
+- Draw the TCP three-way handshake.
+- Explain why DNS uses UDP while HTTP uses TCP.
+- Apply longest prefix matching to a small forwarding table.

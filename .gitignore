@@ -1,0 +1,20 @@
+# Secrets
+.env
+.streamlit/secrets.toml
+
+# Python
+__pycache__/
+*.py[cod]
+.pytest_cache/
+.venv/
+venv/
+env/
+
+# OS / editor
+.DS_Store
+.idea/
+.vscode/
+
+# Raw evaluation outputs are committed on purpose (they are the evidence).
+# Uncomment the next line only if you do NOT want them in the repository.
+# tests/outputs/
